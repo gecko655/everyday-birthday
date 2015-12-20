@@ -1,13 +1,13 @@
 FROM ubuntu
 
+MAINTAINER gecko655 <aqwsedrft1234@yahoo.co.jp>
+
+WORKDIR /root
 RUN apt-get update
-RUN apt-get install -y ruby-dev libffi-dev build-essential
+RUN apt-get install -y ruby-dev libffi-dev build-essential firefox xvfb
 RUN gem install selenium-webdriver
-RUN apt-get install firefox
-RUN apt-get install xvfb
-RUN export DISPLAY=:1 
-RUN Xvfb :1 -screen 0 1024x768x24 &
+ENV DISPLAY=:1 
 
-COPY everyday-birthday.rb
+COPY everyday-birthday.rb /root
 
-CMD rsyslog
+CMD Xvfb :1 -screen 0 1024x768x24 &
