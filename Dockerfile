@@ -20,4 +20,4 @@ RUN (crontab -l; cat crontab.config ) | crontab
 
 COPY everyday-birthday.rb /root
 
-CMD env > /root/env.txt && cron && tail -f /var/log/syslog /tmp/cronlog.log
+CMD env > /root/env.txt && cron && tail -f /tmp/cronlog.log
