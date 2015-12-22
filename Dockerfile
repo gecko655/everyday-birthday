@@ -15,13 +15,9 @@ RUN touch /tmp/cronlog.log
 COPY Gemfile Gemfile
 Run bundle install
 
-COPY secretenv secretenv
-RUN (crontab -l; cat secretenv) | crontab
-RUN rm secretenv
-
 COPY crontab.config crontab.config
 RUN (crontab -l; cat crontab.config ) | crontab
 
 COPY everyday-birthday.rb /root
 
-CMD cron && tail -f /var/log/syslog /tmp/cronlog.log
+CMD env > /root/env.txt && cron && tail -f /var/log/syslog /tmp/cronlog.log
