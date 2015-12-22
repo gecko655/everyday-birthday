@@ -1,13 +1,27 @@
-FROM ubuntu
+FROM ruby
 
 MAINTAINER gecko655 <aqwsedrft1234@yahoo.co.jp>
 
 WORKDIR /root
-RUN apt-get update
-RUN apt-get install -y ruby-dev libffi-dev build-essential firefox xvfb
-RUN gem install selenium-webdriver
-ENV DISPLAY=:1 
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get -y dist-upgrade \
+    && apt-get -y autoremove 
+RUN apt-get install -y vim
+RUN apt-get install -y rsyslog
+
+RUN touch /tmp/cronlog.log
+
+COPY Gemfile Gemfile
+Run bundle install
+
+COPY secretenv secretenv
+RUN (crontab -l; cat secretenv) | crontab
+RUN rm secretenv
+
+COPY crontab.config crontab.config
+RUN (crontab -l; cat crontab.config ) | crontab
 
 COPY everyday-birthday.rb /root
 
-CMD Xvfb :1 -screen 0 1024x768x24 &
+CMD cron && tail -f /var/log/syslog /tmp/cronlog.log
