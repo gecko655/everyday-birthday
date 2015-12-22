@@ -27,7 +27,7 @@ editButton.click
 
 sleep 1
 localtime = Time.now.getlocal("+09:00")
-logger.info("Set "+twitterID+"'s birthday to "+year+"/"+localtime.month+"/"+localtime.day)
+logger.info("Set "+twitterID+"'s birthday to "+year+"/"+localtime.month.to_s+"/"+localtime.day.to_s)
 driver.find_element(:class => "BirthdateSelect-button").click
 birthday = Selenium::WebDriver::Support::Select.new driver.find_element(:class, "BirthdateSelect-month")
 birthday.select_by(:value, localtime.month.to_s)
