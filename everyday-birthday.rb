@@ -17,9 +17,9 @@ logger.info("Accessing to the user page: "+twitterID)
 driver.navigate.to "https://twitter.com/"+twitterID
 
 logger.info("Authentication: "+twitterID)
-signin_email = driver.find_element(:id => "signin-email")
+signin_email = driver.find_element(:name => "session[username_or_email]")
 signin_email.send_keys twitterID
-driver.find_element(:id => "signin-password").send_keys(password)
+driver.find_element(:name => "session[password]").send_keys(password)
 signin_email.submit
 
 editButton = driver.find_element(:class => "UserActions-editButton")
