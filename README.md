@@ -10,7 +10,8 @@ Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
 ## 使い方 (From docker hub)
 ```bash
-$ cat secretenv
+$ curl https://raw.githubusercontent.com/gecko655/everyday-birthday/master/secretenv.template > secretenv
+$ vi secretenv
 # TwitterID=gecko655
 # Password=yourpasswordgoeshere
 # Year=19xx
@@ -31,9 +32,3 @@ $ ./run_selenium_webdriver.sh # seleniumのDockerイメージが立ち上がる
 $ ./run.sh #毎日0時にスクリプトを動かすDockerイメージが立ち上がる
 ```
 
-secretenvの例:
-```
-TwitterID=gecko655
-Password=thisismypassword
-Year=1991
-```
