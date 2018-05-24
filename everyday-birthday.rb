@@ -36,7 +36,10 @@ begin
   birthday = Selenium::WebDriver::Support::Select.new driver.find_element(:class, "BirthdateSelect-year")
   birthday.select_by(:value, year.to_s)
 
+  sleep 3
   driver.find_element(:class, "ProfilePage-saveButton").click
+  sleep 3
+  driver.find_element(:id, "confirm_dialog_submit_button").click
   logger.info("Saved")
 ensure 
   sleep 3 
