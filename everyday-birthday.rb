@@ -3,7 +3,7 @@ require 'logger'
 
 logger = Logger.new(STDOUT)
 
-hostname = ENV["Hostserver_Hostname"]
+hostname = "localhost"
 twitterID = ENV["TwitterID"]
 password = ENV["Password"]
 year = ENV["Year"]
@@ -25,7 +25,7 @@ begin
   editButton = driver.find_element(:class => "UserActions-editButton")
   editButton.click
 
-  sleep 1
+  sleep 3
   localtime = Time.now.getlocal("+09:00")
   logger.info("Set "+twitterID+"'s birthday to "+year+"/"+localtime.month.to_s+"/"+localtime.day.to_s)
   driver.find_element(:class => "BirthdateSelect-button").click
