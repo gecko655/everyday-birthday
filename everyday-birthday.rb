@@ -3,7 +3,7 @@ require 'logger'
 
 logger = Logger.new(STDOUT)
 
-hostname = "localhost"
+hostname = ENV["Hostserver_Hostname"]
 twitterID = ENV["TwitterID"]
 password = ENV["Password"]
 year = ENV["Year"]
