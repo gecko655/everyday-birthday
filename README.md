@@ -12,7 +12,7 @@ Or
 - node v11.13.0
   - Might work on other node versions
 
-## Run on Docker
+## Run on Docker (by cron)
 ```bash
 cp secrets.env.tpl secrets.env
 vi secrets.env
@@ -20,7 +20,7 @@ vi secrets.env
 ./run.sh
 ```
 
-## Run on node
+## Run on node (for one time)
 ```bash
 cp secrets.env.tpl secrets.env
 vi secrets.env
