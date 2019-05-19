@@ -1,2 +1,1 @@
-docker run -d --name everyday-birthday --env-file secretenv -e Hostserver_Hostname=`hostname` gecko655/everyday-birthday
-
+docker run --name everyday-birthday -d --env-file secrets.env gecko655/everyday-birthday

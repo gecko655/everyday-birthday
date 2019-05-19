@@ -1,34 +1,29 @@
 # everyday-birthday
 
+Launch balloons on the user page of Twitter by changing your birthday EVERYDAY.
 Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
-## 動作確認環境
-- Docker 1.9.1
-- Cent OS 7
+## System requirements
+- Docker on Mac 18.09.2
+  - Might work on other docker runtimes
 
-たぶんDockerさえ動けばなんとかなる
+Or
 
-## 使い方 (From docker hub)
+- node v11.13.0
+  - Might work on other node versions
+
+## Run on Docker (by cron)
 ```bash
-$ curl https://raw.githubusercontent.com/gecko655/everyday-birthday/master/secretenv.template > secretenv
-$ vi secretenv
-# TwitterID=gecko655
-# Password=yourpasswordgoeshere
-# Year=19xx
-$ docker run -d --name selenium-standalone -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:latest
-$ docker run -d --name everyday-birthday --env-file secretenv -e Hostserver_Hostname=`hostname` gecko655/everyday-birthday
+cp secrets.env.tpl secrets.env
+vi secrets.env
+./build.sh
+./run.sh
 ```
 
-## 使い方（From source)
+## Run on node (for one time)
 ```bash
-$ git clone git@github.com:gecko655/everyday-birthday.git
-$ cp secretenv.template secretenv
-$ vi secretenv
-# TwitterID=gecko655
-# Password=yourpasswordgoeshere
-# Year=19xx
-$ ./build.sh
-$ ./run_selenium_webdriver.sh # seleniumのDockerイメージが立ち上がる
-$ ./run.sh #毎日0時にスクリプトを動かすDockerイメージが立ち上がる
+cp secrets.env.tpl secrets.env
+vi secrets.env
+npm install
+(export `cat secrets.env` && npm run index)
 ```
-

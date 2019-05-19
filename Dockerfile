@@ -1,23 +1,27 @@
-FROM ruby
+FROM node:12-slim
 
-MAINTAINER gecko655 <aqwsedrft1234@yahoo.co.jp>
+LABEL maintainer "gecko655 <aqwsedrft1234@yahoo.co.jp>"
 
 WORKDIR /root
-RUN apt-get update \
-    && apt-get -y upgrade \
-    && apt-get -y dist-upgrade \
-    && apt-get -y autoremove 
-RUN apt-get install -y vim
-RUN apt-get install -y rsyslog
+
+# Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
+# Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
+# installs, work.
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-unstable fonts-ipafont-gothic\
+      --no-install-recommends \
+    && apt-get install -y busybox-static \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN touch /tmp/cronlog.log
 
-COPY Gemfile Gemfile
-Run bundle install
+ADD package.json package-lock.json tsconfig.json ./
+RUN npm i
 
-COPY crontab.config crontab.config
-RUN (crontab -l; cat crontab.config ) | crontab
+COPY crontab.config /var/spool/cron/crontabs/root
 
-COPY everyday-birthday.rb /root
-
-CMD env > /root/env.txt && cron && tail -f /tmp/cronlog.log
+ADD index.ts ./
+CMD busybox crond -L /tmp/cronlog.log && tail -f /tmp/cronlog.log
