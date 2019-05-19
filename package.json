@@ -1,0 +1,31 @@
+{
+  "name": "everyday-birthday-2",
+  "version": "1.0.0",
+  "description": "Launch Twitter balloons everyday",
+  "main": "index.ts",
+  "scripts": {
+    "index": "ts-node index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gecko655/everyday-birthday.git"
+  },
+  "keywords": [
+    "twitter"
+  ],
+  "author": "gecko655",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gecko655/everyday-birthday/issues"
+  },
+  "homepage": "https://github.com/gecko655/everyday-birthday#readme",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "puppeteer": "^1.16.0",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.2",
+    "ts-node": "^8.1.0"
+  }
+}
