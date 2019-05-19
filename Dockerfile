@@ -1,4 +1,4 @@
-FROM node:12-stretch
+FROM node:12-slim
 
 LABEL maintainer "gecko655 <aqwsedrft1234@yahoo.co.jp>"
 
@@ -12,7 +12,10 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && apt-get update \
     && apt-get install -y google-chrome-unstable fonts-ipafont-gothic\
       --no-install-recommends \
-    && apt-get install -y busybox-static
+    && apt-get install -y busybox-static \
+    && apt-get install -y busybox-static \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN touch /tmp/cronlog.log
 
