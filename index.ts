@@ -36,6 +36,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
   //https://qiita.com/HeRo/items/9be64b559692e12cc109
   const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60 * 1000);
   await page.goto(`https://twitter.com/${twitterID}`,
       {waitUntil: ['load', 'networkidle0']});
   console.log(`Logging in to ${twitterID}`);
