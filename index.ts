@@ -7,9 +7,9 @@ function getISOFormat(year: string, month: string, day: string) {
       `${String(day).padStart(2, '0')}`;
 }
 
-const twitterID = process.env.TWITTER_ID;
-const password = process.env.PASSWORD;
-const year = process.env.YEAR;
+const twitterID = process.env.TWITTER_ID!;
+const password = process.env.PASSWORD!;
+const year = process.env.YEAR!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
 if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined) {
