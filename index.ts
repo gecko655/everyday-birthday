@@ -43,19 +43,27 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
   await page.type('form.LoginForm input[name=session\\[username_or_email\\]]', twitterID);
   await page.type('form.LoginForm input[name=session\\[password\\]]', password);
   await page.click('form.LoginForm input[type=submit]');
-  console.log(`Opening birthday setting page`);
-  await page.waitFor('.UserActions-editButton');
-  await page.click('.UserActions-editButton');
-  await page.waitForSelector('.BirthdateSelect-button', {visible: true});
-  await page.click('.BirthdateSelect-button');
+
+  console.log(`Open profile setting page`);
+
+  await page.goto(`https://twitter.com/settings/profile`),
+  await page.waitFor('div[data-testid=ProfileBirthdate_Edit_Button]');
+  await page.click('div[data-testid=ProfileBirthdate_Edit_Button]');
+  await page.waitFor('div[data-testid=confirmationSheetConfirm]');
+  await page.click('div[data-testid=confirmationSheetConfirm]');
 
   console.log(`Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day));
 
-  await page.select('.BirthdateSelect-year', year);
-  await page.select('.BirthdateSelect-month', month);
-  await page.select('.BirthdateSelect-day', day);
-  await page.click('.ProfilePage-saveButton');
-  await page.click('#confirm_dialog_submit_button');
+  await page.waitFor('select[data-testid=ProfileBirthdate_Year_Selector]');
+  await page.select('select[data-testid=ProfileBirthdate_Year_Selector]', year);
+  await page.select('select[data-testid=ProfileBirthdate_Month_Selector]', month);
+  await page.select('select[data-testid=ProfileBirthdate_Day_Selector]', day);
+
+  console.log(`Save birthday`);
+
+  await page.click('div[data-testid=Profile_Save_Button]');
+  await page.waitFor('div[data-testid=confirmationSheetConfirm]');
+  await page.click('div[data-testid=confirmationSheetConfirm]');
 
   console.log('done!');
 
