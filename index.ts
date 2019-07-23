@@ -64,6 +64,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
   await page.click('div[data-testid=Profile_Save_Button]');
   await page.waitFor('div[data-testid=confirmationSheetConfirm]');
   await page.click('div[data-testid=confirmationSheetConfirm]');
+  await page.waitFor(4000); //適当に待つ
 
   console.log('done!');
 
