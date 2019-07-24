@@ -12,7 +12,7 @@ Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
 Or
 
-- node v11.13.0
+- node v12.2
   - Might work on other node versions
 
 ## Run on Docker (by cron)
