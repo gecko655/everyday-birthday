@@ -39,3 +39,6 @@ vi secrets.env
 npm install
 (export `cat secrets.env` && npm run index)
 ```
+
+## demo
+https://twitter.com/gecko655
