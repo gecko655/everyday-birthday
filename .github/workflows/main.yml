@@ -2,7 +2,7 @@ name: everyday-birthday
 
 on:
   schedule:
-    cron: "1 15 * * *"
+    - cron: "1 15 * * *"
 
 jobs:
   build:
