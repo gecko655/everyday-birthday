@@ -78,4 +78,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
   } finally {
     await browser.close();
   }
-})().catch((e) => {process.exitCode = 1;});
+})().catch((e) => {
+  console.log(e);
+  process.exitCode = 1;
+});
