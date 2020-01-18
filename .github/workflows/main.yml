@@ -1,0 +1,21 @@
+name: everyday-birthday
+
+on:
+  schedule:
+    - cron: "1 15 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: npm install
+        run: npm install
+      - name: run
+        run: npm run index
+        env:
+          TWITTER_ID: ${{ secrets.TWITTER_ID }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          YEAR: ${{ secrets.YEAR }}
+          MAIL: ${{ secrets.MAIL }}
