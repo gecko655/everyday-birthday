@@ -10,6 +10,7 @@ function getISOFormat(year: string, month: string, day: string) {
 const twitterID = process.env.TWITTER_ID!;
 const password = process.env.PASSWORD!;
 const year = process.env.YEAR!;
+const mail = process.env.MAIL!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
 if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined) {
@@ -44,6 +45,12 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
   await page.type('form.LoginForm input[name=session\\[password\\]]', password);
   await page.click('form.LoginForm input[type=submit]');
 
+  let challenge_elem = await page.mainFrame().$('#challenge_response');
+  if (challenge_elem != null || challenge_elem != undefined) {
+    console.log(`Login challenge!`);
+    await page.type('#challenge_response', mail);
+    await page.click('#email_challenge_submit');
+  }
   console.log(`Open profile setting page`);
 
   await page.goto(`https://twitter.com/settings/profile`),
