@@ -35,16 +35,17 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
 (async () => {
   //めんどいからroot cronでpuppeteerを起動するようにしたら謎のoptionが必要になった
   //https://qiita.com/HeRo/items/9be64b559692e12cc109
-  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+  const browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox']});
   try {
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(60 * 1000);
-    await page.goto(`https://twitter.com/${twitterID}`,
+    await page.goto(`https://twitter.com/login`,
         {waitUntil: ['load', 'networkidle0']});
     console.log(`Logging in to ${twitterID}`);
-    await page.type('form.LoginForm input[name=session\\[username_or_email\\]]', twitterID);
-    await page.type('form.LoginForm input[name=session\\[password\\]]', password);
-    await page.click('form.LoginForm input[type=submit]');
+    await page.screenshot({path: 'tmp.png'});
+    await page.type('input[name=session\\[username_or_email\\]]', twitterID);
+    await page.type('input[name=session\\[password\\]]', password);
+    await page.click('div[data-testid=LoginForm_Login_Button]');
 
     const challenge_elem = await page.mainFrame().$('#challenge_response');
     if (challenge_elem != null || challenge_elem != undefined) {
@@ -52,6 +53,8 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
       await page.type('#challenge_response', mail);
       await page.click('#email_challenge_submit');
     }
+    console.log(`Go to user page`);
+    await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
 
     await page.goto(`https://twitter.com/settings/profile`),
