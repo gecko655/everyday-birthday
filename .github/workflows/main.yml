@@ -13,7 +13,7 @@ jobs:
       - name: npm install
         run: npm install
       - name: run (retry at most 3 times including 1st try)
-        run: npm run index || npm run index || npm run index
+        run: npm run index || sleep 60; npm run index || sleep 60; npm run index
         env:
           TWITTER_ID: ${{ secrets.TWITTER_ID }}
           PASSWORD: ${{ secrets.PASSWORD }}
