@@ -19,3 +19,12 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           YEAR: ${{ secrets.YEAR }}
           MAIL: ${{ secrets.MAIL }}
+      - name: Setup a-know/pi
+        uses: peaceiris/actions-pixela@v2
+        with:
+          pi_version: '1.2.0'
+      - name: Increment
+        env:
+          PIXELA_USER_TOKEN: ${{ secrets.PIXELA_USER_TOKEN }}
+        run: |
+          pi pixel increment -u gecko655 -g birthdays
