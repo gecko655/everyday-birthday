@@ -3,6 +3,7 @@ name: everyday-birthday
 on:
   schedule:
     - cron: "1 15 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
