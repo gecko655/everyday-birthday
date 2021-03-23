@@ -1,5 +1,6 @@
-const puppeteer = require('puppeteer');
-const moment = require('moment');
+import puppeteer from 'puppeteer';
+import moment from 'moment';
+import { authenticator } from 'otplib';
 
 function getISOFormat(year: string, month: string, day: string) {
   return `${year}-` +
@@ -11,6 +12,7 @@ const twitterID = process.env.TWITTER_ID!;
 const password = process.env.PASSWORD!;
 const year = process.env.YEAR!;
 const mail = process.env.MAIL!;
+const totpSecret = process.env.TOTP_SECRET!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
 if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined) {
@@ -46,11 +48,18 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     await page.type('input[name=session\\[password\\]]', password);
     await page.click('div[data-testid=LoginForm_Login_Button]');
 
-    const challenge_elem = await page.mainFrame().$('#challenge_response');
-    if (challenge_elem != null || challenge_elem != undefined) {
-      console.log(`Login challenge!`);
-      await page.type('#challenge_response', mail);
+    let challenge_elem = await page.mainFrame().$('#challenge_response');
+    let attempts = 0
+    while(challenge_elem != null) {
+      if(attempts>3) {
+        throw new Error('2FA failed');
+      }
+      console.log('2FA challenge')
+      const totpToken = authenticator.generate(totpSecret);
+      await page.type('#challenge_response', totpToken);
       await page.click('#email_challenge_submit');
+      challenge_elem = await page.mainFrame().$('#challenge_response');
+      attempts++;
     }
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
