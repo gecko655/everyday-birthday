@@ -37,11 +37,10 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
 (async () => {
   //めんどいからroot cronでpuppeteerを起動するようにしたら謎のoptionが必要になった
   //https://qiita.com/HeRo/items/9be64b559692e12cc109
-  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: false
-  });
+  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
   try {
     const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
     page.setDefaultNavigationTimeout(60 * 1000);
     await page.goto(`https://twitter.com/login`,
         {waitUntil: ['load', 'networkidle0']});
