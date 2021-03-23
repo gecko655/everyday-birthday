@@ -19,6 +19,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           YEAR: ${{ secrets.YEAR }}
           MAIL: ${{ secrets.MAIL }}
+          TOTP_SECRET: ${{ secrets.TOTP_SECRET }}
       - name: Setup a-know/pi
         uses: peaceiris/actions-pixela@v2
         with:
