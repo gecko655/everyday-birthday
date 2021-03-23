@@ -1,10 +1,10 @@
 # everyday-birthday
 
-![Docker Build Status](https://img.shields.io/docker/build/gecko655/everyday-birthday.svg)
 ![Docker Automated build](https://img.shields.io/docker/automated/gecko655/everyday-birthday.svg)
 ![everyday-birthday](https://github.com/gecko655/everyday-birthday/workflows/everyday-birthday/badge.svg?event=schedule)
 
 Launch balloons on the user page of Twitter by changing your birthday EVERYDAY.
+
 Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
 ## System requirements
@@ -43,6 +43,8 @@ npm install
 
 ## demo
 https://twitter.com/gecko655
+
+![](./images/everyday-birthday-demo.gif)
 
 ### [gecko655's birthdays](https://pixe.la/v1/users/gecko655/graphs/birthdays.html) (since 2020-01-19)
 ![](https://pixe.la/v1/users/gecko655/graphs/birthdays)
