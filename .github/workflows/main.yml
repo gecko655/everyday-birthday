@@ -3,7 +3,8 @@ name: everyday-birthday
 on:
   schedule:
     - cron: "1 15 * * *"
-  workflow_dispatch:
+  workflow_dispatch: {}
+
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
       - name: npm install
         run: npm install
       - name: run (retry at most 3 times including 1st try)
-        run: npm run index || (sleep 60 && npm run index) || (sleep 60 && npm run index)
+        run: npm run index || (sleep 60 && npm run index) || (sleep 600 && npm run index)
         env:
           TWITTER_ID: ${{ secrets.TWITTER_ID }}
           PASSWORD: ${{ secrets.PASSWORD }}
@@ -30,3 +31,12 @@ jobs:
           PIXELA_USER_TOKEN: ${{ secrets.PIXELA_USER_TOKEN }}
         run: |
           pi pixel increment -u gecko655 -g birthdays
+          - name: Slack Notification on Failure
+      - name: Slack Notification on Failure
+        uses: rtCamp/action-slack-notify@v2.0.2
+        if: failure()
+        env:
+          SLACK_CHANNEL: general
+          SLACK_TITLE: Failed to make today as birthday
+          SLACK_COLOR: danger
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
