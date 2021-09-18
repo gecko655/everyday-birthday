@@ -67,6 +67,12 @@ fs.mkdirSync('output', {recursive: true});
     await page.waitForSelector('input[name=text]');
     await page.type('input[name=text]', totpToken);
     await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+
+    console.log(`Go to user page`);
+    await page.goto(`https://twitter.com/${twitterID}`)
+    console.log(`Open profile setting page`);
+
+    await page.goto(`https://twitter.com/settings/profile`),
     await page.waitForTimeout(5000);
     fs.writeFileSync('output/t1.html', await page.content());
     await page.screenshot({ path: 'output/screenshot1.png' });//スクリーンショットを撮る
