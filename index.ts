@@ -10,71 +10,90 @@ function getISOFormat(year: string, month: string, day: string) {
 
 const twitterID = process.env.TWITTER_ID!;
 const password = process.env.PASSWORD!;
-const year = process.env.YEAR!;
-const mail = process.env.MAIL!;
+let year = process.env.YEAR!;
 const totpSecret = process.env.TOTP_SECRET!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
-if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined) {
+if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined || typeof totpSecret == undefined) {
   throw new Error('Some required ENV is not set (TWITTER_ID, PASSWORD, YEAR)')
 }
 
 const date = moment().utcOffset(utcOffset);
 const month = String(date.month() + 1); //1-indexed month
-let day = String(date.date());
+const day = String(date.date());
 
 // Check date is valid.
 if(!moment(getISOFormat(year, month, day)).isValid()) {
-  //Today is leap year day(Feb 29th) but your birth year does not have that day.
-
-  //Check today is surely Feb 29th
-  day = String(date.date() - 1);
-  if(moment(getISOFormat(year, month, day)).isValid() || month === '2') {
+  // Recover if today is leap year day
+  if(month !== '2' || day !== '29') {
     throw new Error('Invalid date');
+  }
+  // In this case, today is leap year day(Feb 29th) but your birth year does not have that day.
+  // Find other year that fits leap year day as your birthday.
+  while(!moment(getISOFormat(year, month, day)).isValid()) {
+    year = String(+year - 1);
   }
 }
 
 (async () => {
-  //めんどいからroot cronでpuppeteerを起動するようにしたら謎のoptionが必要になった
-  //https://qiita.com/HeRo/items/9be64b559692e12cc109
-  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+  const browser = await puppeteer.launch();
   try {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
     page.setDefaultNavigationTimeout(60 * 1000);
     await page.goto(`https://twitter.com/login`,
         {waitUntil: ['load', 'networkidle0']});
-    console.log(`Logging in to ${twitterID}`);
-    await page.type('input[name=session\\[username_or_email\\]]', twitterID);
-    await page.type('input[name=session\\[password\\]]', password);
-    await page.click('div[data-testid=LoginForm_Login_Button]');
 
-    let challenge_elem = await page.mainFrame().$('#challenge_response');
-    let attempts = 0
-    while(challenge_elem != null) {
-      if(attempts>3) {
-        throw new Error('2FA failed');
-      }
+    await page.waitForTimeout(4000); //適当に待つ
+
+    console.log(`Logging in to ${twitterID}`);
+    let i_flow_login_elem = await page.$('input[name=username]');
+    if (i_flow_login_elem != null) {
+      console.log('2021 new login flow page!')
+      await page.type('input[name=username]', twitterID);
+      await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+      await page.waitForSelector('input[name=password]');
+      await page.type('input[name=password]', password);
+      await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
       console.log('2FA challenge')
       const totpToken = authenticator.generate(totpSecret);
-      await page.type('#challenge_response', totpToken);
-      await page.click('#email_challenge_submit');
-      challenge_elem = await page.mainFrame().$('#challenge_response');
-      attempts++;
+      await page.waitForSelector('input[name=text]');
+      await page.type('input[name=text]', totpToken);
+      await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+    } else {
+      // そのうち消す
+      await page.type('input[name=session\\[username_or_email\\]]', twitterID);
+      await page.type('input[name=session\\[password\\]]', password);
+      await page.click('div[data-testid=LoginForm_Login_Button]');
+
+      let challenge_elem = await page.mainFrame().$('#challenge_response');
+      let attempts = 0
+      while(challenge_elem != null) {
+        if(attempts>3) {
+          throw new Error('2FA failed');
+        }
+        console.log('2FA challenge')
+        const totpToken = authenticator.generate(totpSecret);
+        await page.waitForSelector('#challenge_response');
+        await page.type('#challenge_response', totpToken);
+        await page.click('#email_challenge_submit');
+        challenge_elem = await page.mainFrame().$('#challenge_response');
+        attempts++;
+      }
     }
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
 
     await page.goto(`https://twitter.com/settings/profile`),
-    await page.waitFor('div[data-testid=ProfileBirthdate_Edit_Button]');
+    await page.waitForSelector('div[data-testid=ProfileBirthdate_Edit_Button]');
     await page.click('div[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.waitFor('div[data-testid=confirmationSheetConfirm]');
+    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
     await page.click('div[data-testid=confirmationSheetConfirm]');
 
     console.log(`Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day));
 
-    await page.waitFor('select[data-testid=ProfileBirthdate_Year_Selector]');
+    await page.waitForSelector('select[data-testid=ProfileBirthdate_Year_Selector]');
     await page.select('select[data-testid=ProfileBirthdate_Year_Selector]', year);
     await page.select('select[data-testid=ProfileBirthdate_Month_Selector]', month);
     await page.select('select[data-testid=ProfileBirthdate_Day_Selector]', day);
@@ -82,9 +101,9 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     console.log(`Save birthday`);
 
     await page.click('div[data-testid=Profile_Save_Button]');
-    await page.waitFor('div[data-testid=confirmationSheetConfirm]');
+    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
     await page.click('div[data-testid=confirmationSheetConfirm]');
-    await page.waitFor(4000); //適当に待つ
+    await page.waitForTimeout(4000); //適当に待つ
 
     console.log('done!');
   } finally {
