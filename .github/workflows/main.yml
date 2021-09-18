@@ -22,24 +22,6 @@ jobs:
           YEAR: ${{ secrets.YEAR }}
           MAIL: ${{ secrets.MAIL }}
           TOTP_SECRET: ${{ secrets.TOTP_SECRET }}
-      - name: Setup a-know/pi
-        uses: peaceiris/actions-pixela@v2
-        with:
-          pi_version: '1.2.0'
-      - name: Increment
-        env:
-          PIXELA_USER_TOKEN: ${{ secrets.PIXELA_USER_TOKEN }}
-        run: |
-          pi pixel increment -u gecko655 -g birthdays
-          - name: Slack Notification on Failure
-      - name: Slack Notification on Failure
-        uses: rtCamp/action-slack-notify@v2.0.2
-        if: failure()
-        env:
-          SLACK_CHANNEL: general
-          SLACK_MESSAGE: Failed to make today as birthday
-          SLACK_COLOR: danger
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: screenshot
         uses: actions/upload-artifact@v2
         with:
