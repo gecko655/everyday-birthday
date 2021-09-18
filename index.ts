@@ -65,6 +65,8 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     await page.type('input[name=text]', totpToken);
     await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
 
+    await page.waitForTimeout(4000); // 適当に待つ
+
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
