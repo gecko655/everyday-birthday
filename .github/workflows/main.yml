@@ -40,3 +40,8 @@ jobs:
           SLACK_MESSAGE: Failed to make today as birthday
           SLACK_COLOR: danger
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: screenshot
+        uses: actions/upload-artifact@v2
+        with:
+          name: output
+          path: output
