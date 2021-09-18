@@ -31,7 +31,6 @@ jobs:
           PIXELA_USER_TOKEN: ${{ secrets.PIXELA_USER_TOKEN }}
         run: |
           pi pixel increment -u gecko655 -g birthdays
-          - name: Slack Notification on Failure
       - name: Slack Notification on Failure
         uses: rtCamp/action-slack-notify@v2.0.2
         if: failure()

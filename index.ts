@@ -52,13 +52,14 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     await page.waitForSelector('input[name=text], input[name=password]');
     let mail_address_input = await page.$('input[name=text]');
     if (mail_address_input != null) {
+      console.log('twitter is suspecting me!');
       await page.type('input[name=text]', mail);
       await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
     }
     await page.waitForSelector('input[name=password]');
     await page.type('input[name=password]', password);
     await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
-    console.log('2FA challenge')
+    console.log('2FA challenge');
     const totpToken = authenticator.generate(totpSecret);
     await page.waitForSelector('input[name=text]');
     await page.type('input[name=text]', totpToken);
