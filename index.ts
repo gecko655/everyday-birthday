@@ -12,6 +12,7 @@ const twitterID = process.env.TWITTER_ID!;
 const password = process.env.PASSWORD!;
 let year = process.env.YEAR!;
 const totpSecret = process.env.TOTP_SECRET!;
+const mail = process.env.MAIL!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
 if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined || typeof totpSecret == undefined) {
@@ -41,46 +42,28 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
     page.setDefaultNavigationTimeout(60 * 1000);
-    await page.goto(`https://twitter.com/login`,
+    await page.goto(`https://twitter.com/i/flow/login`,
         {waitUntil: ['load', 'networkidle0']});
 
-    await page.waitForTimeout(4000); //適当に待つ
-
     console.log(`Logging in to ${twitterID}`);
-    let i_flow_login_elem = await page.$('input[name=username]');
-    if (i_flow_login_elem != null) {
-      console.log('2021 new login flow page!')
-      await page.type('input[name=username]', twitterID);
+    await page.waitForSelector('input[name=username]');
+    await page.type('input[name=username]', twitterID);
+    await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+    await page.waitForSelector('input[name=text], input[name=password]');
+    let mail_address_input = await page.$('input[name=text]');
+    if (mail_address_input != null) {
+      await page.type('input[name=text]', mail);
       await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
-      await page.waitForSelector('input[name=password]');
-      await page.type('input[name=password]', password);
-      await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
-      console.log('2FA challenge')
-      const totpToken = authenticator.generate(totpSecret);
-      await page.waitForSelector('input[name=text]');
-      await page.type('input[name=text]', totpToken);
-      await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
-    } else {
-      // そのうち消す
-      await page.type('input[name=session\\[username_or_email\\]]', twitterID);
-      await page.type('input[name=session\\[password\\]]', password);
-      await page.click('div[data-testid=LoginForm_Login_Button]');
-
-      let challenge_elem = await page.mainFrame().$('#challenge_response');
-      let attempts = 0
-      while(challenge_elem != null) {
-        if(attempts>3) {
-          throw new Error('2FA failed');
-        }
-        console.log('2FA challenge')
-        const totpToken = authenticator.generate(totpSecret);
-        await page.waitForSelector('#challenge_response');
-        await page.type('#challenge_response', totpToken);
-        await page.click('#email_challenge_submit');
-        challenge_elem = await page.mainFrame().$('#challenge_response');
-        attempts++;
-      }
     }
+    await page.waitForSelector('input[name=password]');
+    await page.type('input[name=password]', password);
+    await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+    console.log('2FA challenge')
+    const totpToken = authenticator.generate(totpSecret);
+    await page.waitForSelector('input[name=text]');
+    await page.type('input[name=text]', totpToken);
+    await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
+
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
