@@ -63,40 +63,8 @@ fs.mkdirSync('output', {recursive: true});
     await page.type('input[name=password]', password);
     await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
     await page.waitForTimeout(5000);
-    fs.writeFileSync('output/t2.html', await page.content());
-    await page.screenshot({ path: 'output/screenshot2.png' });//スクリーンショットを撮る
-    console.log('2FA challenge')
-    const totpToken = authenticator.generate(totpSecret);
-    await page.waitForSelector('input[name=text]');
-    await page.type('input[name=text]', totpToken);
-    await page.click('#layers [aria-modal=true][role=dialog] [role=dialog] > :nth-child(2) > :nth-child(2) [role=button]')
-
-    await page.waitForTimeout(5000);
-    fs.writeFileSync('output/t2.html', await page.content());
-    await page.screenshot({ path: 'output/screenshot2.png' });//スクリーンショットを撮る
-
-    console.log(`Go to user page`);
-    await page.goto(`https://twitter.com/${twitterID}`)
-    console.log(`Open profile setting page`);
-
-    await page.goto(`https://twitter.com/settings/profile`),
-    await page.waitForSelector('div[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.click('div[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
-    await page.click('div[data-testid=confirmationSheetConfirm]');
-
-    console.log(`Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day));
-
-    await page.waitForSelector('select[data-testid=ProfileBirthdate_Year_Selector]');
-    await page.select('select[data-testid=ProfileBirthdate_Year_Selector]', year);
-    await page.select('select[data-testid=ProfileBirthdate_Month_Selector]', month);
-    await page.select('select[data-testid=ProfileBirthdate_Day_Selector]', day);
-
-    console.log(`Save birthday`);
-
-    await page.click('div[data-testid=Profile_Save_Button]');
-    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
-    await page.click('div[data-testid=confirmationSheetConfirm]');
+    fs.writeFileSync('output/t1.html', await page.content());
+    await page.screenshot({ path: 'output/screenshot1.png' });//スクリーンショットを撮る
     await page.waitForTimeout(4000); //適当に待つ
 
     console.log('done!');
