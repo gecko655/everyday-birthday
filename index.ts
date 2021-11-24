@@ -37,7 +37,9 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    //headless: false,
+  });
   try {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
@@ -46,9 +48,9 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
         {waitUntil: ['load', 'networkidle0']});
 
     console.log(`Logging in to ${twitterID}`);
-    await page.waitForSelector('input[name=username]');
-    await page.type('input[name=username]', twitterID);
-    await page.click('#layers [aria-modal=true][role=dialog] > :nth-child(1) > :nth-child(1) > :nth-child(2) > :nth-child(2) > :nth-child(2) [role=button]')
+    await page.waitForSelector('input[autocomplete=username]');
+    await page.type('input[autocomplete=username]', twitterID);
+    await page.click('#layers [aria-modal=true][role=dialog]  [role=group] > :nth-child(2) > :nth-child(1) > :nth-child(1) > [role=button]:nth-child(6)');
     await page.waitForSelector('input[name=text], input[name=password]');
     let mail_address_input = await page.$('input[name=text]');
     if (mail_address_input != null) {
@@ -63,7 +65,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     const totpToken = authenticator.generate(totpSecret);
     await page.waitForSelector('input[name=text]');
     await page.type('input[name=text]', totpToken);
-    await page.click('#layers [aria-modal=true][role=dialog] > :nth-child(1) > :nth-child(1) > :nth-child(2) > :nth-child(2) > :nth-child(2) [role=button]')
+    await page.click('[data-testid=ocfEnterTextNextButton]');
 
     await page.waitForTimeout(4000); // 適当に待つ
 
