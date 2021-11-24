@@ -65,7 +65,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     const totpToken = authenticator.generate(totpSecret);
     await page.waitForSelector('input[name=text]');
     await page.type('input[name=text]', totpToken);
-    await page.click('#layers [aria-modal=true][role=dialog] > :nth-child(1) > :nth-child(1) > :nth-child(2) > :nth-child(2) > :nth-child(2) [role=button]')
+    await page.click('[data-testid=ocfEnterTextNextButton]');
 
     await page.waitForTimeout(4000); // 適当に待つ
 
