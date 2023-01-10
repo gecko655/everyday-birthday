@@ -21,7 +21,7 @@
   "homepage": "https://github.com/gecko655/everyday-birthday#readme",
   "dependencies": {
     "@types/puppeteer": "^5.4.3",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "otplib": "^12.0.1",
     "puppeteer": "^13.5.2",
     "typescript": "^3.9.10"
