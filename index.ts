@@ -82,9 +82,9 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     console.log(`Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day));
 
     await page.waitForSelector('select[data-testid=ProfileBirthdate_Year_Selector]');
-    await page.select('select[data-testid=ProfileBirthdate_Year_Selector]', year);
-    await page.select('select[data-testid=ProfileBirthdate_Month_Selector]', month);
     await page.select('select[data-testid=ProfileBirthdate_Day_Selector]', day);
+    await page.select('select[data-testid=ProfileBirthdate_Month_Selector]', month);
+    await page.select('select[data-testid=ProfileBirthdate_Year_Selector]', year);
 
     console.log(`Save birthday`);
 
