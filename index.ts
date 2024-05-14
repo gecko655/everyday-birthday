@@ -74,10 +74,10 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     console.log(`Open profile setting page`);
 
     await page.goto(`https://twitter.com/settings/profile`),
-    await page.waitForSelector('div[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.click('div[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
-    await page.click('div[data-testid=confirmationSheetConfirm]');
+    await page.waitForSelector('button[data-testid=ProfileBirthdate_Edit_Button]');
+    await page.click('button[data-testid=ProfileBirthdate_Edit_Button]');
+    await page.waitForSelector('button[data-testid=confirmationSheetConfirm]');
+    await page.click('button[data-testid=confirmationSheetConfirm]');
 
     console.log(`Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day));
 
@@ -88,9 +88,9 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
 
     console.log(`Save birthday`);
 
-    await page.click('div[data-testid=Profile_Save_Button]');
-    await page.waitForSelector('div[data-testid=confirmationSheetConfirm]');
-    await page.click('div[data-testid=confirmationSheetConfirm]');
+    await page.click('button[data-testid=Profile_Save_Button]');
+    await page.waitForSelector('button[data-testid=confirmationSheetConfirm]');
+    await page.click('button[data-testid=confirmationSheetConfirm]');
     await page.waitForTimeout(4000); //適当に待つ
 
     console.log('done!');
