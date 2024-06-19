@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/gecko655/everyday-birthday#readme",
   "dependencies": {
-    "moment": "^2.29.4",
+    "moment": "^2.30.1",
     "otplib": "^12.0.1",
     "puppeteer": "^22.11.2",
-    "typescript": "^3.9.10"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/node": "^12.0.2",
