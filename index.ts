@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, {GoToOptions} from 'puppeteer';
 import moment from 'moment';
 import { authenticator } from 'otplib';
 
@@ -67,13 +67,13 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     await page.type('input[name=text]', totpToken);
     await page.click('[data-testid=ocfEnterTextNextButton]');
 
-    await page.waitForTimeout(4000); // 適当に待つ
+    await new Promise(r => setTimeout(r, 4000)); // 適当に待つ
 
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
 
-    await page.goto(`https://twitter.com/settings/profile`),
+    await page.goto(`https://twitter.com/settings/profile`);
     await page.waitForSelector('button[data-testid=ProfileBirthdate_Edit_Button]');
     await page.click('button[data-testid=ProfileBirthdate_Edit_Button]');
     await page.waitForSelector('button[data-testid=confirmationSheetConfirm]');
@@ -91,7 +91,7 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     await page.click('button[data-testid=Profile_Save_Button]');
     await page.waitForSelector('button[data-testid=confirmationSheetConfirm]');
     await page.click('button[data-testid=confirmationSheetConfirm]');
-    await page.waitForTimeout(4000); //適当に待つ
+    await new Promise(r => setTimeout(r, 4000)); // 適当に待つ
 
     console.log('done!');
   } finally {
