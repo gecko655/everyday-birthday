@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, {GoToOptions} from 'puppeteer';
 import moment from 'moment';
 import { authenticator } from 'otplib';
 
@@ -44,8 +44,10 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
     page.setDefaultNavigationTimeout(60 * 1000);
-    await page.goto(`https://twitter.com/i/flow/login`,
-        {waitUntil: ['load', 'networkidle0']});
+    // FIXME: 型が通らないんだが
+    // @ts-ignore
+    const options: GoToOptions = {waitUntil: ['load', 'networkidle0']};
+    await page.goto(`https://twitter.com/i/flow/login`, options);
 
     console.log(`Logging in to ${twitterID}`);
     await page.waitForSelector('input[autocomplete=username]');
