@@ -74,8 +74,8 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
     console.log(`Open profile setting page`);
 
     await page.goto(`https://twitter.com/settings/profile`);
-    await page.waitForSelector('button[data-testid=ProfileBirthdate_Edit_Button]');
-    await page.click('button[data-testid=ProfileBirthdate_Edit_Button]');
+    await page.waitForSelector('button[data-testid=pivot]');
+    await page.click('button[data-testid=pivot]');
     await page.waitForSelector('button[data-testid=confirmationSheetConfirm]');
     await page.click('button[data-testid=confirmationSheetConfirm]');
 
