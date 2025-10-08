@@ -17,7 +17,7 @@ if (typeof twitterID == undefined || typeof year == undefined || typeof AUTH_TOK
 }
 
 const date = DateTime.now().setZone(utcOffset);
-const month = String(date.month); //1-indexed month
+const month = String(date.month);
 const day = String(date.day);
 
 // Check date is valid.
