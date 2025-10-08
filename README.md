@@ -1,6 +1,5 @@
 # everyday-birthday
 
-![Docker Automated build](https://img.shields.io/docker/automated/gecko655/everyday-birthday.svg)
 ![everyday-birthday](https://github.com/gecko655/everyday-birthday/workflows/everyday-birthday/badge.svg?event=schedule)
 ![](https://pixe.la/v1/users/gecko655/graphs/birthdays?mode=badge)
 
@@ -9,37 +8,19 @@ Launch balloons on the user page of Twitter by changing your birthday EVERYDAY.
 Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
 ## System requirements
-- Docker on Mac 18.09.2
-  - Might work on other docker runtimes
-
-Or
-
-- node v12.2
+- node v20
   - Might work on other node versions
 
-## Run on Docker (by cron)
-```bash
-curl https://raw.githubusercontent.com/gecko655/everyday-birthday/master/secrets.env.tpl -o secrets.env
-docker pull gecko655/everyday-birthday
-docker run --name everyday-birthday -d --env-file secrets.env gecko655/everyday-birthday
-```
+## How it works
+This project runs automatically on GitHub Actions using a scheduled workflow (cron).
+The workflow runs daily at 00:01 JST (15:01 UTC) to update the Twitter birthday.
 
-or
-
-```bash
-# clone this repository
-cp secrets.env.tpl secrets.env
-vi secrets.env
-./build.sh
-./run.sh
-```
-
-## Run on node (for one time)
+## Run locally (for one time)
 ```bash
 cp secrets.env.tpl secrets.env
 vi secrets.env
-npm install
-(export `cat secrets.env` && npm run index)
+yarn install
+(export $(cat secrets.env) && yarn index)
 ```
 
 ## demo
