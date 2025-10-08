@@ -20,10 +20,8 @@ jobs:
         run: yarn index || (sleep 60 && yarn index) || (sleep 60 && yarn index)
         env:
           TWITTER_ID: ${{ secrets.TWITTER_ID }}
-          PASSWORD: ${{ secrets.PASSWORD }}
           YEAR: ${{ secrets.YEAR }}
-          MAIL: ${{ secrets.MAIL }}
-          TOTP_SECRET: ${{ secrets.TOTP_SECRET }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
       - name: Setup a-know/pi
         uses: peaceiris/actions-pixela@v2
         with:

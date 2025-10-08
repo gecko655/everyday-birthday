@@ -1,6 +1,5 @@
-import puppeteer, {GoToOptions} from 'puppeteer';
+import puppeteer from 'puppeteer';
 import moment from 'moment';
-import { authenticator } from 'otplib';
 
 function getISOFormat(year: string, month: string, day: string) {
   return `${year}-` +
@@ -9,14 +8,12 @@ function getISOFormat(year: string, month: string, day: string) {
 }
 
 const twitterID = process.env.TWITTER_ID!;
-const password = process.env.PASSWORD!;
 let year = process.env.YEAR!;
-const totpSecret = process.env.TOTP_SECRET!;
-const mail = process.env.MAIL!;
+const AUTH_TOKEN = process.env.AUTH_TOKEN!;
 const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
 // Check all variables are set.
-if (typeof twitterID == undefined || typeof password == undefined || typeof year == undefined || typeof totpSecret == undefined) {
-  throw new Error('Some required ENV is not set (TWITTER_ID, PASSWORD, YEAR)')
+if (typeof twitterID == undefined || typeof year == undefined || typeof AUTH_TOKEN == undefined) {
+  throw new Error('Some required ENV is not set (TWITTER_ID, YEAR, AUTH_TOKEN)')
 }
 
 const date = moment().utcOffset(utcOffset);
@@ -38,37 +35,13 @@ if(!moment(getISOFormat(year, month, day)).isValid()) {
 
 (async () => {
   const browser = await puppeteer.launch({
-    //headless: false,
+    // headless: false,
   });
   try {
     const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36')
     page.setDefaultNavigationTimeout(60 * 1000);
-    await page.goto(`https://twitter.com/i/flow/login`,
-        {waitUntil: ['load', 'networkidle0']});
 
-    console.log(`Logging in to ${twitterID}`);
-    await page.waitForSelector('input[autocomplete=username]');
-    await page.type('input[autocomplete=username]', twitterID);
-    await page.click('#layers [aria-modal=true][role=dialog]  [role=group] > :nth-child(2) > :nth-child(1) > :nth-child(1) > :nth-child(1) > [role=button]:nth-child(6)');
-    await page.waitForSelector('input[name=text], input[name=password]');
-    let mail_address_input = await page.$('input[name=text]');
-    if (mail_address_input != null) {
-      console.log('twitter is suspecting me!');
-      await page.type('input[name=text]', mail);
-      await page.click('#layers [aria-modal=true][role=dialog] > :nth-child(1) > :nth-child(1) > :nth-child(2) > :nth-child(2) > :nth-child(2) [role=button]')
-    }
-    await page.waitForSelector('input[name=password]');
-    await page.type('input[name=password]', password);
-    await page.click('#layers [aria-modal=true][role=dialog] > :nth-child(1) > :nth-child(1) > :nth-child(2) > :nth-child(2) > :nth-child(2) [role=button]')
-    console.log('2FA challenge');
-    const totpToken = authenticator.generate(totpSecret);
-    await page.waitForSelector('input[name=text]');
-    await page.type('input[name=text]', totpToken);
-    await page.click('[data-testid=ocfEnterTextNextButton]');
-
-    await new Promise(r => setTimeout(r, 4000)); // 適当に待つ
-
+    await browser.setCookie({ name: 'auth_token', value: AUTH_TOKEN, domain: '.x.com'});
     console.log(`Go to user page`);
     await page.goto(`https://twitter.com/${twitterID}`)
     console.log(`Open profile setting page`);
