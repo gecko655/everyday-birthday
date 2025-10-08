@@ -1,10 +1,27 @@
 import puppeteer from 'puppeteer';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 function getISOFormat(year: string, month: string, day: string) {
   return `${year}-` +
       `${String(month).padStart(2, '0')}-` +
       `${String(day).padStart(2, '0')}`;
+}
+
+function convertOffsetToLuxonZone(offset: string): string {
+  // Convert moment-style offset like '+0900' to luxon zone format like 'UTC+9'
+  // Examples: '+0900' -> 'UTC+9', '-0500' -> 'UTC-5', '+0530' -> 'UTC+5:30'
+  if (offset.match(/^[+-]\d{4}$/)) {
+    const sign = offset[0];
+    const hours = parseInt(offset.slice(1, 3), 10);
+    const minutes = parseInt(offset.slice(3, 5), 10);
+    if (minutes === 0) {
+      return `UTC${sign}${hours}`;
+    } else {
+      return `UTC${sign}${hours}:${String(minutes).padStart(2, '0')}`;
+    }
+  }
+  // If it's already in a valid format, return as-is
+  return offset;
 }
 
 const twitterID = process.env.TWITTER_ID!;
@@ -16,19 +33,19 @@ if (typeof twitterID == undefined || typeof year == undefined || typeof AUTH_TOK
   throw new Error('Some required ENV is not set (TWITTER_ID, YEAR, AUTH_TOKEN)')
 }
 
-const date = moment().utcOffset(utcOffset);
-const month = String(date.month() + 1); //1-indexed month
-const day = String(date.date());
+const date = DateTime.now().setZone(convertOffsetToLuxonZone(utcOffset));
+const month = String(date.month); //1-indexed month
+const day = String(date.day);
 
 // Check date is valid.
-if(!moment(getISOFormat(year, month, day)).isValid()) {
+if(!DateTime.fromISO(getISOFormat(year, month, day)).isValid) {
   // Recover if today is leap year day
   if(month !== '2' || day !== '29') {
     throw new Error('Invalid date');
   }
   // In this case, today is leap year day(Feb 29th) but your birth year does not have that day.
   // Find other year that fits leap year day as your birthday.
-  while(!moment(getISOFormat(year, month, day)).isValid()) {
+  while(!DateTime.fromISO(getISOFormat(year, month, day)).isValid) {
     year = String(+year - 1);
   }
 }
