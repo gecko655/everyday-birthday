@@ -4,7 +4,11 @@
   "description": "Launch Twitter balloons everyday",
   "main": "index.ts",
   "scripts": {
-    "index": "ts-node index.ts"
+    "index": "ts-node index.ts",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "check": "biome check ."
   },
   "repository": {
     "type": "git",
@@ -25,6 +29,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.5",
     "@types/node": "^12.0.2",
     "ts-node": "^8.10.2"
   }

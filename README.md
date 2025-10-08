@@ -42,6 +42,15 @@ npm install
 (export `cat secrets.env` && npm run index)
 ```
 
+## Development
+### Format code
+```bash
+npm run format        # Format all files
+npm run format:check  # Check formatting without making changes
+npm run lint          # Run linter
+npm run check         # Run all checks (format + lint)
+```
+
 ## demo
 https://twitter.com/gecko655
 
