@@ -7,33 +7,16 @@ function getISOFormat(year: string, month: string, day: string) {
       `${String(day).padStart(2, '0')}`;
 }
 
-function convertOffsetToLuxonZone(offset: string): string {
-  // Convert moment-style offset like '+0900' to luxon zone format like 'UTC+9'
-  // Examples: '+0900' -> 'UTC+9', '-0500' -> 'UTC-5', '+0530' -> 'UTC+5:30'
-  if (offset.match(/^[+-]\d{4}$/)) {
-    const sign = offset[0];
-    const hours = parseInt(offset.slice(1, 3), 10);
-    const minutes = parseInt(offset.slice(3, 5), 10);
-    if (minutes === 0) {
-      return `UTC${sign}${hours}`;
-    } else {
-      return `UTC${sign}${hours}:${String(minutes).padStart(2, '0')}`;
-    }
-  }
-  // If it's already in a valid format, return as-is
-  return offset;
-}
-
 const twitterID = process.env.TWITTER_ID!;
 let year = process.env.YEAR!;
 const AUTH_TOKEN = process.env.AUTH_TOKEN!;
-const utcOffset = process.env.UTC_OFFSET || '+0900'; // default to 'JST'
+const utcOffset = process.env.UTC_OFFSET || 'UTC+9'; // default to 'JST'
 // Check all variables are set.
 if (typeof twitterID == undefined || typeof year == undefined || typeof AUTH_TOKEN == undefined) {
   throw new Error('Some required ENV is not set (TWITTER_ID, YEAR, AUTH_TOKEN)')
 }
 
-const date = DateTime.now().setZone(convertOffsetToLuxonZone(utcOffset));
+const date = DateTime.now().setZone(utcOffset);
 const month = String(date.month); //1-indexed month
 const day = String(date.day);
 
