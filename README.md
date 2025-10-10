@@ -1,6 +1,6 @@
 # everyday-birthday
 
-![everyday-birthday](https://github.com/gecko655/everyday-birthday/workflows/everyday-birthday/badge.svg?event=schedule)
+[![everyday-birthday](https://github.com/gecko655/everyday-birthday/actions/workflows/main.yml/badge.svg)](https://github.com/gecko655/everyday-birthday/actions/workflows/main.yml)
 ![](https://pixe.la/v1/users/gecko655/graphs/birthdays?mode=badge)
 
 Launch balloons on the user page of Twitter by changing your birthday EVERYDAY.
