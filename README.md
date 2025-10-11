@@ -19,17 +19,17 @@ The workflow runs daily at 00:01 JST (15:01 UTC) to update the Twitter birthday.
 ```bash
 cp secrets.env.tpl secrets.env
 vi secrets.env
-yarn install
-(export $(cat secrets.env) && yarn index)
+bun install
+(export $(cat secrets.env) && bun index)
 ```
 
 ## Development
 ### Format code
 ```bash
-npm run format        # Format all files
-npm run format:check  # Check formatting without making changes
-npm run lint          # Run linter
-npm run check         # Run all checks (format + lint)
+bun run format        # Format all files
+bun run format:check  # Check formatting without making changes
+bun run lint          # Run linter
+bun run check         # Run all checks (format + lint)
 ```
 
 ## demo
