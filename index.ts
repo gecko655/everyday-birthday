@@ -13,16 +13,6 @@ const twitterID = process.env.TWITTER_ID!;
 let year = process.env.YEAR!;
 const AUTH_TOKEN = process.env.AUTH_TOKEN!;
 const utcOffset = process.env.UTC_OFFSET || "UTC+9"; // default to 'JST'
-// Check all variables are set.
-if (
-  typeof twitterID == undefined ||
-  typeof year == undefined ||
-  typeof AUTH_TOKEN == undefined
-) {
-  throw new Error(
-    "Some required ENV is not set (TWITTER_ID, YEAR, AUTH_TOKEN)",
-  );
-}
 
 const date = DateTime.now().setZone(utcOffset);
 const month = String(date.month);
@@ -65,7 +55,7 @@ if (!DateTime.fromISO(getISOFormat(year, month, day)).isValid) {
     await page.click("button[data-testid=confirmationSheetConfirm]");
 
     console.log(
-      `Setting ${twitterID}'s birthday to ` + getISOFormat(year, month, day),
+      `Setting ${twitterID}'s birthday to ${getISOFormat(year, month, day)}`,
     );
 
     await page.waitForSelector(
