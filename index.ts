@@ -1,5 +1,5 @@
-import puppeteer from "puppeteer";
 import { DateTime } from "luxon";
+import puppeteer from "puppeteer";
 
 function getISOFormat(year: string, month: string, day: string) {
   return (
