@@ -7,6 +7,10 @@ Launch balloons on the user page of Twitter by changing your birthday EVERYDAY.
 
 Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 
+10周年記念記事
+
+https://gecko655.hatenablog.com/entry/everyday-birthday-10th-anniversary
+
 ## System requirements
 - node v20
   - Might work on other node versions
