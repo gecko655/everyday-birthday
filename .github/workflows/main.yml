@@ -34,7 +34,7 @@ jobs:
         run: |
           pi pixel increment -u gecko655 -g birthdays
       - name: Slack Notification on Failure
-        uses: rtCamp/action-slack-notify@v2.0.2
+        uses: rtCamp/action-slack-notify@v2.4.0
         if: failure()
         env:
           SLACK_CHANNEL: general
