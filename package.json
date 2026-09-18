@@ -4,7 +4,7 @@
   "description": "Launch Twitter balloons everyday",
   "main": "index.ts",
   "scripts": {
-    "index": "ts-node index.ts",
+    "index": "tsx index.ts",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
@@ -32,6 +32,6 @@
     "@biomejs/biome": "2.5.12",
     "@types/luxon": "^3.7.5",
     "@types/node": "^26.5.1",
-    "ts-node": "^10.9.2"
+    "tsx": "4.23.13"
   }
 }
