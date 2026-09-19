@@ -22,7 +22,7 @@ const day = String(date.day);
 if (!DateTime.fromISO(getISOFormat(year, month, day)).isValid) {
   // Recover if today is leap year day
   if (month !== "2" || day !== "29") {
-    throw new Error("Invalid date");
+    throw new Error(`Invalid date(year:${year}, month:${month}, day:${day})`);
   }
   // In this case, today is leap year day(Feb 29th) but your birth year does not have that day.
   // Find other year that fits leap year day as your birthday.
