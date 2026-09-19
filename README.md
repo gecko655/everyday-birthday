@@ -12,8 +12,9 @@ Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 https://gecko655.hatenablog.com/entry/everyday-birthday-10th-anniversary
 
 ## System requirements
-- node v20
+- node v26
   - Might work on other node versions
+- bun
 
 ## How it works
 This project runs automatically on GitHub Actions using a scheduled workflow (cron).
