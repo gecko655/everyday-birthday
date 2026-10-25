@@ -12,15 +12,18 @@ Twitterの誕生日を毎日0時に変更して、毎日風船を飛ばすやつ
 https://gecko655.hatenablog.com/entry/everyday-birthday-10th-anniversary
 
 ## System requirements
+
 - node v26
   - Might work on other node versions
 - bun
 
 ## How it works
+
 This project runs automatically on GitHub Actions using a scheduled workflow (cron).
 The workflow runs daily at 00:01 JST (15:01 UTC) to update the Twitter birthday.
 
 ## Run locally (for one time)
+
 ```bash
 cp secrets.env.tpl secrets.env
 vi secrets.env
@@ -29,7 +32,9 @@ bun install
 ```
 
 ## Development
+
 ### Format code
+
 ```bash
 bun run format        # Format all files
 bun run format:check  # Check formatting without making changes
@@ -38,10 +43,12 @@ bun run check         # Run all checks (format + lint)
 ```
 
 ## demo
+
 https://twitter.com/gecko655
 
 ![](./images/everyday-birthday-demo.gif)
 
 ### [gecko655's birthdays](https://pixe.la/v1/users/gecko655/graphs/birthdays.html) (since 2020-01-19)
+
 ![](https://pixe.la/v1/users/gecko655/graphs/birthdays)
 Powered by [Pixela](https://pixe.la)
