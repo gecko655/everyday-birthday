@@ -5,7 +5,6 @@ on:
     - cron: "1 15 * * *"
   workflow_dispatch: {}
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +15,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: bun install
         run: bun install
-      - name: disable Ubuntu's security feature 
+      - name: disable Ubuntu's security feature
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
       - name: run (retry at most 3 times including 1st try)
         run: bun index || (sleep 60 && bun index) || (sleep 60 && bun index)
@@ -27,7 +26,7 @@ jobs:
       - name: Setup a-know/pi
         uses: peaceiris/actions-pixela@v2
         with:
-          pi_version: '1.2.0'
+          pi_version: "1.2.0"
       - name: Increment
         env:
           PIXELA_USER_TOKEN: ${{ secrets.PIXELA_USER_TOKEN }}
